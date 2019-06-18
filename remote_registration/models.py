@@ -5,17 +5,26 @@ from django.db import models
 
 class MedicalInstitution(models.Model):
 
+    ward = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     city = models.CharField(max_length=64)
     province = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
-    services = models.ManyToManyField("Procedure")
+
+    def save(self, *args, **kwargs):
+        for field_name in ['ward', 'name', 'city', 'province','address']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super().save(*args, **kwargs)
+
 
 
 class Procedure(models.Model):
     name = models.CharField(max_length=128)
     details = models.CharField(max_length=256)
     duration = models.DurationField()
+    medical_institutions = models.ManyToManyField(MedicalInstitution)
 
 
 
@@ -26,11 +35,11 @@ class Personnel(models.Model):
     name = models.CharField(max_length=128)
     surname = models.CharField(max_length=128)
     medical_institutions = models.ManyToManyField(MedicalInstitution, through="TimeTable")
-    service = models.ManyToManyField(Procedure)
+    procedures = models.ManyToManyField(Procedure)
 
 
 class WeekDays(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=12)
 
 
 class TimeTable(models.Model):
@@ -45,5 +54,5 @@ class Event(models.Model):
     personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    service = models.ForeignKey(Procedure, on_delete=models.CASCADE)
+    procedure = models.ForeignKey(Procedure, on_delete=models.CASCADE)
     medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE)
