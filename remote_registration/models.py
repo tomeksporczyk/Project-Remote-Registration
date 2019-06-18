@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 
+
 class MedicalInstitution(models.Model):
 
     ward = models.CharField(max_length=256)
@@ -11,13 +12,15 @@ class MedicalInstitution(models.Model):
     province = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
 
+    def __str__(self):
+        return f'Oddział: {self.ward}Instytuja: {self.name}'
+
     def save(self, *args, **kwargs):
-        for field_name in ['ward', 'name', 'city', 'province','address']:
+        for field_name in ['ward', 'name', 'city', 'province', 'address']:
             val = getattr(self, field_name, False)
             if val:
                 setattr(self, field_name, val.upper())
         super().save(*args, **kwargs)
-
 
 
 class Procedure(models.Model):
@@ -26,6 +29,12 @@ class Procedure(models.Model):
     duration = models.DurationField()
     medical_institutions = models.ManyToManyField(MedicalInstitution)
 
+    def save(self, *args, **kwargs):
+        for field_name in ['name', 'details']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super().save(*args, **kwargs)
 
 
 class Personnel(models.Model):

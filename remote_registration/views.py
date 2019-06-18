@@ -19,14 +19,39 @@ class AddMedicalInstitution(FormView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        name = form.cleaned_data.get('name')
-        city = form.cleaned_data.get('city')
-        address = form.cleaned_data.get('address')
-        ward = form.cleaned_data.get('ward')
-        institution = MedicalInstitution.objects.filter(name=name, city=city, address=address, ward=ward)
+        name = form.cleaned_data.get('name').upper()
+        city = form.cleaned_data.get('city').upper()
+        address = form.cleaned_data.get('address').upper()
+        ward = form.cleaned_data.get('ward').upper()
+        institution = MedicalInstitution.objects.filter(name=name,
+                                                        city=city,
+                                                        address=address,
+                                                        ward=ward)
         print(institution.count())
         if institution.count() == 0:
             form.save()
             return super().form_valid(form)
         self.success_url = reverse_lazy('add_institution')
         return super().form_valid(form)
+
+
+class AddProcedure(FormView):
+    form_class = AddProcedureForm
+    template_name = 'remote_registration/uni_form_add.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        name = form.cleaned_data.get('name').upper()
+        details = form.cleaned_data.get('details').upper()
+        duration = form.cleaned_data.get('duration')
+        # medical_institutions = form.cleaned_data.get('medical_institutions')
+        procedure = Procedure.objects.filter(name=name,
+                                             details=details,
+                                             duration=duration,
+                                             )
+        if procedure.count() == 0:
+            form.save()
+            return super().form_valid(form)
+        self.success_url = reverse_lazy('add_procedure')
+        return super().form_valid(form)
+

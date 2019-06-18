@@ -1,6 +1,6 @@
 from django import forms
 
-from remote_registration.models import MedicalInstitution
+from remote_registration.models import *
 
 
 PROVINCES = (
@@ -36,3 +36,11 @@ class AddMedicalInstitutionForm(forms.ModelForm):
         fields = '__all__'
 
 
+class AddProcedureForm(forms.ModelForm):
+    class Meta:
+        model = Procedure
+        labels = {'name': "Nazwa procedury",
+                  'details': "Szczegóły procedury",
+                  'duration': "Czas trwania",
+                  'medical_institutions': "Placówka wykonawcza"}
+        fields = '__all__'
