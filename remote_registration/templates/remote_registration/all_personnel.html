@@ -1,0 +1,19 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <table>
+    <tbody>
+        <tr>
+            <th>ID</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+        </tr>
+        {% for person in personnel %}
+            <tr>
+                <td>{{ person.pk }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.surname }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

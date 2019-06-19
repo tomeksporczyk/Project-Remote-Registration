@@ -13,6 +13,7 @@ urlpatterns = [
     path("procedure/add", AddProcedure.as_view(), name='add_procedure'),
     path("procedure/update/<int:pk>", UpdateProcedure.as_view(), name='update_procedure'),
     path("procedure/delete/<int:pk>", DeleteProcedure.as_view(), name='delete_procedure'),
+    path("personnel/", PersonnelView.as_view(), name='personnel'),
     path("personnel/add", AddPersonnel.as_view(), name='add_personnel'),
     path("personnel/update/<int:pk>", UpdatePersonnel.as_view(), name='update_personnel'),
     path("personnel/delete/<int:pk>", DeletePersonnel.as_view(), name='delete_personnel'),

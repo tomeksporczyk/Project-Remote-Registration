@@ -173,3 +173,17 @@ class ProcedureView(View):
         procedures = Procedure.objects.all()
         context = {'procedures': procedures}
         return render(request, 'remote_registration/all_procedure.html', context)
+
+
+class PersonnelView(View):
+    def get(self, request):
+        personnel = Personnel.objects.all().order_by('pk')
+        context = {'personnel': personnel}
+        return render(request, 'remote_registration/all_personnel.html', context)
+
+
+class TimeTableView(View):
+    def get(self, request):
+        time_table = TimeTable.objects.all().order_by('pk')
+        context = {'timetable': time_table}
+        return render(request, 'remote_registration/all_personnel.html', context)
