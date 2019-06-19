@@ -1,0 +1,8 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+    Czy chcesz usunąć obiekt: {{ object }}
+        <input type="submit" value="Usuń">
+    </form>
+{% endblock %}

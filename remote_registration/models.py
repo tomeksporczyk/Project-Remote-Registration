@@ -51,17 +51,33 @@ class Personnel(models.Model):
     medical_institutions = models.ManyToManyField(MedicalInstitution, through="TimeTable")
     procedures = models.ManyToManyField(Procedure)
 
+    def __str__(self):
+        return f'{self.name} {self.surname}'
+
+    def save(self, *args, **kwargs):
+        for field_name in ['name', 'surname']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super().save(*args, **kwargs)
+
 
 class WeekDays(models.Model):
     name = models.CharField(max_length=12)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class TimeTable(models.Model):
     day = models.ForeignKey(WeekDays, on_delete=models.CASCADE, null=True)
     personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
-    medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE,null=True)
+    medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE, null=True)
     start = models.TimeField(null=True)
     end = models.TimeField(null=True)
+
+    def __str__(self):
+        return f'Pracownik: {self.personnel.name} {self.personnel.surname} dzień: {self.day}'
 
 
 class Event(models.Model):

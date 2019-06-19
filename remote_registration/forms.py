@@ -54,3 +54,30 @@ class AddPersonnelForm(forms.ModelForm):
                   'medical_institutions': "Placówka wykonawcza",
                   'procedures': "Procedury"}
         fields = '__all__'
+
+
+class CreateTimeTableForm(forms.ModelForm):
+    class Meta:
+        model = TimeTable
+        fields = '__all__'
+        labels = {'day': 'Dzień tygodnia',
+                  'personnel': 'Pracownik',
+                  'medical_institution': 'Placówka',
+                  'start': 'Czas rozpoczęcia pracy',
+                  'end': 'Czas zakończenia pracy'}
+        widgets = {'start': forms.TimeInput(),
+                   'end': forms.TimeInput()}
+
+
+class UpdateTimeTableForm(forms.ModelForm):
+    class Meta:
+        model = TimeTable
+        fields = ['day', 'start', 'end']
+        labels = {'day': 'Dzień tygodnia',
+                  'start': 'Czas rozpoczęcia pracy',
+                  'end': 'Czas zakończenia pracy'}
+        widgets = {'start': forms.TimeInput(),
+                   'end': forms.TimeInput()}
+
+
+

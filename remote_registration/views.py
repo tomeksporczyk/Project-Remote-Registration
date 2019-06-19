@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView, CreateView, DeleteView
 
 from remote_registration.forms import *
 
@@ -58,7 +58,7 @@ class AddProcedure(FormView):
 class AddPersonnel(FormView):
     form_class = AddPersonnelForm
     template_name = 'remote_registration/uni_form_add.html'
-    success_url = reverse_lazy('home')
+
 
     def form_valid(self, form):
         name = form.cleaned_data.get('name').upper()
@@ -67,7 +67,40 @@ class AddPersonnel(FormView):
                                              surname=surname)
         if personnel.count() == 0:
             form.save()
+            personnel = Personnel.objects.get(name=name, surname=surname)
+            timetable = personnel.timetable_set.all()[0].pk
+            self.success_url = reverse_lazy('update_time_table', kwargs={'pk': timetable})
             return super().form_valid(form)
         self.success_url = reverse_lazy('add_personnel')
         return super().form_valid(form)
+
+
+class CreateTimeTable(CreateView):
+    form_class = CreateTimeTableForm
+    model = TimeTable
+    success_url = reverse_lazy('home')
+    template_name = 'remote_registration/uni_form_add.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start'].widget = forms.TimeInput()
+        return form
+
+
+class UpdateTimeTable(UpdateView):
+    form_class = UpdateTimeTableForm
+    model = TimeTable
+    success_url = reverse_lazy('home')
+    template_name = 'remote_registration/uni_form_add.html'
+
+
+class DeleteTimeTable(DeleteView):
+    model = TimeTable
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(TimeTable, id=id_)
+
 
