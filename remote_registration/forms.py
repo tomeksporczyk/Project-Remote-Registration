@@ -41,6 +41,16 @@ class AddProcedureForm(forms.ModelForm):
         model = Procedure
         labels = {'name': "Nazwa procedury",
                   'details': "Szczegóły procedury",
-                  'duration': "Czas trwania",
+                  'duration': "Czas trwania (min)",
                   'medical_institutions': "Placówka wykonawcza"}
+        fields = '__all__'
+
+
+class AddPersonnelForm(forms.ModelForm):
+    class Meta:
+        model = Personnel
+        labels = {'name': "Imię",
+                  'surname': "Nazwisko",
+                  'medical_institutions': "Placówka wykonawcza",
+                  'procedures': "Procedury"}
         fields = '__all__'

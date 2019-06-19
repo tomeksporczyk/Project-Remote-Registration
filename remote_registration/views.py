@@ -44,7 +44,6 @@ class AddProcedure(FormView):
         name = form.cleaned_data.get('name').upper()
         details = form.cleaned_data.get('details').upper()
         duration = form.cleaned_data.get('duration')
-        # medical_institutions = form.cleaned_data.get('medical_institutions')
         procedure = Procedure.objects.filter(name=name,
                                              details=details,
                                              duration=duration,
@@ -53,5 +52,22 @@ class AddProcedure(FormView):
             form.save()
             return super().form_valid(form)
         self.success_url = reverse_lazy('add_procedure')
+        return super().form_valid(form)
+
+
+class AddPersonnel(FormView):
+    form_class = AddPersonnelForm
+    template_name = 'remote_registration/uni_form_add.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        name = form.cleaned_data.get('name').upper()
+        surname = form.cleaned_data.get('surname').upper()
+        personnel = Personnel.objects.filter(name=name,
+                                             surname=surname)
+        if personnel.count() == 0:
+            form.save()
+            return super().form_valid(form)
+        self.success_url = reverse_lazy('add_personnel')
         return super().form_valid(form)
 

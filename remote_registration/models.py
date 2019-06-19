@@ -13,7 +13,7 @@ class MedicalInstitution(models.Model):
     address = models.CharField(max_length=64)
 
     def __str__(self):
-        return f'Oddział: {self.ward}Instytuja: {self.name}'
+        return f'Oddział: {self.ward} \nInstytuja: {self.name}'
 
     def save(self, *args, **kwargs):
         for field_name in ['ward', 'name', 'city', 'province', 'address']:
@@ -29,7 +29,11 @@ class Procedure(models.Model):
     duration = models.DurationField()
     medical_institutions = models.ManyToManyField(MedicalInstitution)
 
+    def __str__(self):
+        return f'Nazwa: {self.name} \n Szczegóły {self.details}'
+
     def save(self, *args, **kwargs):
+        self.duration *= 60
         for field_name in ['name', 'details']:
             val = getattr(self, field_name, False)
             if val:
@@ -40,6 +44,7 @@ class Procedure(models.Model):
 class Personnel(models.Model):
     '''
      todo: pozwiązać z tabelą User, tworząc randomowe hasło wysyłane przy pomocy maila na podany adres https://docs.djangoproject.com/en/2.2/topics/email/. DODAĆ nową kolumnę: email
+     todo: więcej informcji o pracowniku, do celów walidacji przy wprowadzaniu do bazy danych
      '''
     name = models.CharField(max_length=128)
     surname = models.CharField(max_length=128)
@@ -52,11 +57,11 @@ class WeekDays(models.Model):
 
 
 class TimeTable(models.Model):
-    day = models.ForeignKey(WeekDays, on_delete=models.CASCADE)
+    day = models.ForeignKey(WeekDays, on_delete=models.CASCADE, null=True)
     personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
-    medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE)
-    start = models.TimeField()
-    end = models.TimeField()
+    medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE,null=True)
+    start = models.TimeField(null=True)
+    end = models.TimeField(null=True)
 
 
 class Event(models.Model):
