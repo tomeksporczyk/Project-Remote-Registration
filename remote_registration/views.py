@@ -184,6 +184,6 @@ class PersonnelView(View):
 
 class TimeTableView(View):
     def get(self, request):
-        time_table = TimeTable.objects.all().order_by('pk')
-        context = {'timetable': time_table}
-        return render(request, 'remote_registration/all_personnel.html', context)
+        time_table = TimeTable.objects.all().order_by('personnel')
+        context = {'time_table': time_table}
+        return render(request, 'remote_registration/all_time_table.html', context)

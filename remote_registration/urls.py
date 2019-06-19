@@ -17,6 +17,7 @@ urlpatterns = [
     path("personnel/add", AddPersonnel.as_view(), name='add_personnel'),
     path("personnel/update/<int:pk>", UpdatePersonnel.as_view(), name='update_personnel'),
     path("personnel/delete/<int:pk>", DeletePersonnel.as_view(), name='delete_personnel'),
+    path("timetable/", TimeTableView.as_view(), name='time_table'),
     path("timetable/add", CreateTimeTable.as_view(), name='add_time_table'),
     path("timetable/update/<int:pk>", UpdateTimeTable.as_view(), name='update_time_table'),
     path("timetable/delete/<int:pk>", DeleteTimeTable.as_view(), name='delete_time_table'),

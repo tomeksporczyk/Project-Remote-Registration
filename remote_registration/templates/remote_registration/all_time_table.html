@@ -1,0 +1,23 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <table>
+    <tbody>
+        <tr>
+            <th>Pracownik</th>
+            <th>Dzień</th>
+            <th>Placówka medyczna</th>
+            <th>Początek pracy</th>
+            <th>Koniec pracy</th>
+        </tr>
+        {% for table in time_table %}
+            <tr>
+                <td>{{ table.personnel }}</td>
+                <td>{{ table.day }}</td>
+                <td>{{ table.medical_institution }}</td>
+                <td>{{ table.start }}</td>
+                <td>{{ table.end }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
