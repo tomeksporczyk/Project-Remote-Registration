@@ -70,11 +70,21 @@ class UpdateProcedureForm(forms.ModelForm):
 class AddPersonnelForm(forms.ModelForm):
     class Meta:
         model = Personnel
+        fields = '__all__'
         labels = {'name': "Imię",
                   'surname': "Nazwisko",
                   'medical_institutions': "Placówka wykonawcza",
                   'procedures': "Procedury"}
+
+
+class UpdatePersonnelForm(forms.ModelForm):
+    class Meta:
+        model = Personnel
         fields = '__all__'
+        labels = {'name': "Imię",
+                  'surname': "Nazwisko",
+                  'medical_institutions': "Placówka wykonawcza",
+                  'procedures': "Procedury"}
 
 
 class CreateTimeTableForm(forms.ModelForm):

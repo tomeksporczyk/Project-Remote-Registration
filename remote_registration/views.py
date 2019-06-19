@@ -40,7 +40,7 @@ class UpdateMedicalInstitution(UpdateView):
     form_class = UpdateMedicalInstitutionForm
     model = MedicalInstitution
     success_url = reverse_lazy('home')
-    template_name = 'remote_registration/uni_form_add.html'
+    template_name = 'remote_registration/uni_form_update.html'
 
 
 class DeleteMedicalInstitution(DeleteView):
@@ -77,7 +77,7 @@ class UpdateProcedure(UpdateView):
     form_class = UpdateProcedureForm
     model = Procedure
     success_url = reverse_lazy('home')
-    template_name = 'remote_registration/uni_form_add.html'
+    template_name = 'remote_registration/uni_form_update.html'
 
 
 class DeleteProcedure(DeleteView):
@@ -94,7 +94,6 @@ class AddPersonnel(FormView):
     form_class = AddPersonnelForm
     template_name = 'remote_registration/uni_form_add.html'
 
-
     def form_valid(self, form):
         name = form.cleaned_data.get('name').upper()
         surname = form.cleaned_data.get('surname').upper()
@@ -108,6 +107,24 @@ class AddPersonnel(FormView):
             return super().form_valid(form)
         self.success_url = reverse_lazy('add_personnel')
         return super().form_valid(form)
+
+
+class UpdatePersonnel(UpdateView):
+    '''todo: procedury i placówka defaultowo powinny być zaznaczone zgodnie z bazą danych'''
+    form_class = UpdatePersonnelForm
+    model = Personnel
+    success_url = reverse_lazy('home')
+    template_name = 'remote_registration/uni_form_update.html'
+
+
+class DeletePersonnel(DeleteView):
+    model = Personnel
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(Personnel, id=id_)
 
 
 class CreateTimeTable(CreateView):
@@ -126,7 +143,7 @@ class UpdateTimeTable(UpdateView):
     form_class = UpdateTimeTableForm
     model = TimeTable
     success_url = reverse_lazy('home')
-    template_name = 'remote_registration/uni_form_add.html'
+    template_name = 'remote_registration/uni_form_update.html'
 
 
 class DeleteTimeTable(DeleteView):
@@ -144,4 +161,8 @@ class DeleteTimeTable(DeleteView):
 #         return render(request, 'remote_registration/uni_form_add.html')
 
 
-
+class MedicalInstitutionView(View):
+    def get(self, request):
+        institutions = MedicalInstitution.objects.all()
+        context = {'institutions': institutions}
+        return render(request, 'remote_registration/all_medical_institution.html', context)

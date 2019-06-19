@@ -1,0 +1,23 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <table>
+    <tbody>
+        <tr>
+            <th>Nazwa instytucji</th>
+            <th>Oddział</th>
+            <th>Województwo</th>
+            <th>Miejscowość</th>
+            <th>Adres</th>
+        </tr>
+        {% for institution in institutions %}
+            <tr>
+                <td>{{ institution.name }}</td>
+                <td>{{ institution.ward }}</td>
+                <td>{{ institution.province }}</td>
+                <td>{{ institution.city }}</td>
+                <td>{{ institution.address }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
