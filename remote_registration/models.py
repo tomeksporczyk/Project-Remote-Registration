@@ -5,7 +5,7 @@ from django.db import models
 
 
 class MedicalInstitution(models.Model):
-
+    '''todo: lepsze rozwiązanie = tabela z województwami, tak jak w przypadku dni tygodnia'''
     ward = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     city = models.CharField(max_length=64)
@@ -33,7 +33,6 @@ class Procedure(models.Model):
         return f'Nazwa: {self.name} \n Szczegóły {self.details}'
 
     def save(self, *args, **kwargs):
-        self.duration *= 60
         for field_name in ['name', 'details']:
             val = getattr(self, field_name, False)
             if val:

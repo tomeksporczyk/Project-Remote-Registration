@@ -35,6 +35,24 @@ class AddMedicalInstitution(FormView):
         return super().form_valid(form)
 
 
+class UpdateMedicalInstitution(UpdateView):
+    '''todo: województwo w formularzu nie jest importowane z bazy danych (zawsze jest śląskie)'''
+    form_class = UpdateMedicalInstitutionForm
+    model = MedicalInstitution
+    success_url = reverse_lazy('home')
+    template_name = 'remote_registration/uni_form_add.html'
+
+
+class DeleteMedicalInstitution(DeleteView):
+    model = MedicalInstitution
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(MedicalInstitution, id=id_)
+
+
 class AddProcedure(FormView):
     form_class = AddProcedureForm
     template_name = 'remote_registration/uni_form_add.html'
@@ -53,6 +71,23 @@ class AddProcedure(FormView):
             return super().form_valid(form)
         self.success_url = reverse_lazy('add_procedure')
         return super().form_valid(form)
+
+
+class UpdateProcedure(UpdateView):
+    form_class = UpdateProcedureForm
+    model = Procedure
+    success_url = reverse_lazy('home')
+    template_name = 'remote_registration/uni_form_add.html'
+
+
+class DeleteProcedure(DeleteView):
+    model = Procedure
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(Procedure, id=id_)
 
 
 class AddPersonnel(FormView):
@@ -102,5 +137,11 @@ class DeleteTimeTable(DeleteView):
     def get_object(self):
         id_ = self.kwargs.get('pk')
         return get_object_or_404(TimeTable, id=id_)
+
+#
+# class AddEvent(View):
+#     def get(self, request):
+#         return render(request, 'remote_registration/uni_form_add.html')
+
 
 

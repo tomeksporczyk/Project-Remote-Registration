@@ -2,7 +2,6 @@ from django import forms
 
 from remote_registration.models import *
 
-
 PROVINCES = (
     ('dolnośląskie', 'dolnośląskie'),
     ('kujawsko-pomorskie', 'kujawsko-pomorskie'),
@@ -23,9 +22,11 @@ PROVINCES = (
     ('zachodniopomorskie', 'zachodniopomorskie')
 )
 
+
 class AddMedicalInstitutionForm(forms.ModelForm):
     class Meta:
         model = MedicalInstitution
+        fields = '__all__'
         labels = {'ward': 'Oddział',
                   'name': 'Nazwa instytucji',
                   'city': 'Miasto',
@@ -33,17 +34,37 @@ class AddMedicalInstitutionForm(forms.ModelForm):
                   'address': "Adres"}
         widgets = {'province': forms.Select(choices=PROVINCES)}
 
+
+class UpdateMedicalInstitutionForm(forms.ModelForm):
+    class Meta:
+        model = MedicalInstitution
         fields = '__all__'
+        labels = {'ward': 'Oddział',
+                  'name': 'Nazwa instytucji',
+                  'city': 'Miasto',
+                  'province': 'Województwo',
+                  'address': "Adres"}
+        widgets = {'province': forms.Select(choices=PROVINCES)}
 
 
 class AddProcedureForm(forms.ModelForm):
     class Meta:
         model = Procedure
+        fields = '__all__'
         labels = {'name': "Nazwa procedury",
                   'details': "Szczegóły procedury",
-                  'duration': "Czas trwania (min)",
+                  'duration': "Czas trwania (format: GG:MM:SS)",
                   'medical_institutions': "Placówka wykonawcza"}
+
+
+class UpdateProcedureForm(forms.ModelForm):
+    class Meta:
+        model = Procedure
         fields = '__all__'
+        labels = {'name': "Nazwa procedury",
+                  'details': "Szczegóły procedury",
+                  'duration': "Czas trwania (format: GG:MM:SS)",
+                  'medical_institutions': "Placówka wykonawcza"}
 
 
 class AddPersonnelForm(forms.ModelForm):
