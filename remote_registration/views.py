@@ -166,3 +166,10 @@ class MedicalInstitutionView(View):
         institutions = MedicalInstitution.objects.all()
         context = {'institutions': institutions}
         return render(request, 'remote_registration/all_medical_institution.html', context)
+
+
+class ProcedureView(View):
+    def get(self, request):
+        procedures = Procedure.objects.all()
+        context = {'procedures': procedures}
+        return render(request, 'remote_registration/all_procedure.html', context)

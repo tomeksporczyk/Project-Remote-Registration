@@ -9,6 +9,7 @@ urlpatterns = [
     path("institution/add", AddMedicalInstitution.as_view(), name='add_institution'),
     path("institution/update/<int:pk>", UpdateMedicalInstitution.as_view(), name='update_institution'),
     path("institution/delete/<int:pk>", DeleteMedicalInstitution.as_view(), name='delete_institution'),
+    path("procedure/", ProcedureView.as_view(), name='procedure'),
     path("procedure/add", AddProcedure.as_view(), name='add_procedure'),
     path("procedure/update/<int:pk>", UpdateProcedure.as_view(), name='update_procedure'),
     path("procedure/delete/<int:pk>", DeleteProcedure.as_view(), name='delete_procedure'),

@@ -1,0 +1,15 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <table>
+    <tbody>
+        <tr>
+            <th>Nazwa procedury</th>
+        </tr>
+        {% for procedure in procedures %}
+            <tr>
+                <td>{{ procedure.name }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
