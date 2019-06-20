@@ -1,5 +1,6 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
+    <a href="add">Dodaj nowy grafik</a>
     <table>
     <tbody>
         <tr>
@@ -16,6 +17,10 @@
                 <td>{{ table.medical_institution }}</td>
                 <td>{{ table.start }}</td>
                 <td>{{ table.end }}</td>
+                <td>
+                    <a href="update/{{ table.id }}">Aktualizuj informacje</a>
+                    <a href="delete/{{ table.id }}">Usuń</a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

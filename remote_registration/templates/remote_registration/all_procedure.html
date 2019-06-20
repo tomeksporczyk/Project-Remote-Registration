@@ -1,5 +1,6 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
+    <a href="add">Dodaj nową procedurę</a>
     <table>
     <tbody>
         <tr>
@@ -8,6 +9,10 @@
         {% for procedure in procedures %}
             <tr>
                 <td>{{ procedure.name }}</td>
+                <td>
+                    <a href="update/{{ procedure.id }}">Aktualizuj informacje</a>
+                    <a href="delete/{{ procedure.id }}">Usuń</a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

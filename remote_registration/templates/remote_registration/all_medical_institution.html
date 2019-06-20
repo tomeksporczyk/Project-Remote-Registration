@@ -1,5 +1,7 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
+    <div>
+    <a href="add">Dodaj nową instytucję</a>
     <table>
     <tbody>
         <tr>
@@ -16,8 +18,13 @@
                 <td>{{ institution.province }}</td>
                 <td>{{ institution.city }}</td>
                 <td>{{ institution.address }}</td>
+                <td>
+                    <a href="update/{{ institution.id }}">Aktualizuj informacje</a>
+                    <a href="delete/{{ institution.id }}">Usuń</a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>
     </table>
+    </div>
 {% endblock %}
