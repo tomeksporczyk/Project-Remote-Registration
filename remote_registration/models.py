@@ -31,17 +31,32 @@ class MedicalInstitution(models.Model):
         super().save(*args, **kwargs)
 
 
-class Procedure(models.Model):
+class ProcedureCategories(models.Model):
     name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def save(self, *args, **kwargs):
+        for field_name in ['name']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super().save(*args, **kwargs)
+
+
+class Procedure(models.Model):
+    name = models.ForeignKey(ProcedureCategories, on_delete=models.CASCADE)
     details = models.CharField(max_length=256)
     duration = models.DurationField()
     medical_institutions = models.ManyToManyField(MedicalInstitution)
 
     def __str__(self):
-        return f'Nazwa: {self.name} \n Szczegóły {self.details}'
+        return f'Szczegóły {self.details}'
+    #Nazwa: {self.name} \n
 
     def save(self, *args, **kwargs):
-        for field_name in ['name', 'details']:
+        for field_name in ['details']:
             val = getattr(self, field_name, False)
             if val:
                 setattr(self, field_name, val.upper())
@@ -97,4 +112,5 @@ class Event(models.Model):
 
 class Referral(models.Model):
     patient = models.ForeignKey(User, on_delete=models.CASCADE)
-    procedure = models.ForeignKey(Procedure, on_delete=models.CASCADE)
+    procedure = models.ForeignKey(ProcedureCategories, on_delete=models.CASCADE)
+    details = models.ForeignKey(Procedure, on_delete=models.CASCADE)

@@ -4,25 +4,6 @@ from django.contrib.auth.forms import UserChangeForm
 from remote_registration.models import *
 from remote_registration.validators import *
 
-PROVINCES = (
-    ('dolnośląskie', 'dolnośląskie'),
-    ('kujawsko-pomorskie', 'kujawsko-pomorskie'),
-    ('lubelskie', 'lubelskie'),
-    ('lubuskie', 'lubuskie'),
-    ('łódzkie', 'łódzkie'),
-    ('małopolskie', 'małopolskie'),
-    ('mazowieckie', 'mazowieckie'),
-    ('opolskie', 'opolskie'),
-    ('podkarpackie', 'podkarpackie'),
-    ('podlaskie', 'podlaskie'),
-    ('pomorskie', 'pomorskie'),
-    ('śląskie', 'śląskie'),
-    ('świętokrzyskie', 'świętokrzyskie'),
-    ('warmińsko-mazurskie', 'warmińsko-mazurskie'),
-    ('wielkopolskie', 'wielkopolskie'),
-    ('zachodniopomorskie', 'zachodniopomorskie')
-)
-
 
 class AddMedicalInstitutionForm(forms.ModelForm):
     class Meta:
@@ -44,7 +25,13 @@ class UpdateMedicalInstitutionForm(forms.ModelForm):
                   'city': 'Miasto',
                   'province': 'Województwo',
                   'address': "Adres"}
-        widgets = {'province': forms.Select(choices=PROVINCES)}
+
+
+class AddProcedureCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ProcedureCategories
+        fields = '__all__'
+        labels = {'name': 'Nazwa procedury'}
 
 
 class AddProcedureForm(forms.ModelForm):
@@ -111,11 +98,17 @@ class UpdateTimeTableForm(forms.ModelForm):
                    'end': forms.TimeInput()}
 
 
-class AddReferralForm(forms.ModelForm):
+class AddReferralForm(forms.Form):
+    patient = forms.ModelChoiceField(queryset=User.objects.all())
+    procedure = forms.ModelChoiceField(queryset=ProcedureCategories.objects.all())
+    details = forms.ModelChoiceField(queryset=Procedure.objects.all())
+
+
+class UpdateReferralForm(forms.ModelForm):
     class Meta:
         model = Referral
-        fields = '__all__'
-        labels = {'patient': 'Pacjent', 'procedure': 'Badanie'}
+        fields = ['procedure', 'details']
+        labels = {'procedure': 'Badanie', 'details': 'Szczegóły'}
 
 
 class LoginForm(forms.Form):

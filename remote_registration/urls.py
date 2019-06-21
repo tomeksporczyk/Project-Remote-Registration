@@ -11,6 +11,8 @@ urlpatterns = [
     path("institution/delete/<int:pk>", DeleteMedicalInstitution.as_view(), name='delete_institution'),
     path("procedure/", ProcedureView.as_view(), name='procedure'),
     path("procedure/add", AddProcedure.as_view(), name='add_procedure'),
+    path("procedure/category/add", AddProcedureCategory.as_view(), name='add_procedure_category'),
+    path("procedure/category/delete/<int:pk>", DeleteProcedureCategory.as_view(), name='delete_procedure_category'),
     path("procedure/update/<int:pk>", UpdateProcedure.as_view(), name='update_procedure'),
     path("procedure/delete/<int:pk>", DeleteProcedure.as_view(), name='delete_procedure'),
     path("personnel/", PersonnelView.as_view(), name='personnel'),
@@ -21,5 +23,9 @@ urlpatterns = [
     path("timetable/add", CreateTimeTable.as_view(), name='add_time_table'),
     path("timetable/update/<int:pk>", UpdateTimeTable.as_view(), name='update_time_table'),
     path("timetable/delete/<int:pk>", DeleteTimeTable.as_view(), name='delete_time_table'),
+    path("referral/", ReferralView.as_view(), name='referral'),
+    path("referral/add", AddReferral.as_view(), name='add_referral'),
+    path("referral/update/<int:pk>", UpdateReferral.as_view(), name='update_referral'),
+    path("referral/delete/<int:pk>", DeleteTimeTable.as_view(), name='delete_referral'),
 
 ]

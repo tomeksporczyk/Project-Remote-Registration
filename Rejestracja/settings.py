@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'Rejestracja.wsgi.application'
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
-        'NAME': 'NFZ',
+        'NAME': 'NFZ2',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': POSTGRES_USER,
         'PASSWORD': POSTGRES_PASSWORD,

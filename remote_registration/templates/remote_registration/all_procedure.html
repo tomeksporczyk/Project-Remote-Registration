@@ -1,14 +1,17 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
+    <a href="category/add">Dodaj nową kategorię</a>
     <a href="add">Dodaj nową procedurę</a>
     <table>
     <tbody>
         <tr>
             <th>Nazwa procedury</th>
+            <th>Szczegóły procedury</th>
         </tr>
         {% for procedure in procedures %}
             <tr>
                 <td>{{ procedure.name }}</td>
+                <td>{{ procedure.details }}</td>
                 <td>
                     <a href="update/{{ procedure.id }}">Aktualizuj informacje</a>
                     <a href="delete/{{ procedure.id }}">Usuń</a>

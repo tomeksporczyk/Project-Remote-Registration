@@ -15,6 +15,13 @@ class HomeView(View):
         return render(request, 'remote_registration/base.html')
 
 
+class MedicalInstitutionView(View):
+    def get(self, request):
+        institutions = MedicalInstitution.objects.all()
+        context = {'institutions': institutions}
+        return render(request, 'remote_registration/all_medical_institution.html', context)
+
+
 class AddMedicalInstitution(FormView):
     form_class = AddMedicalInstitutionForm
     template_name = "remote_registration/uni_form_add.html"
@@ -55,13 +62,37 @@ class DeleteMedicalInstitution(DeleteView):
         return get_object_or_404(MedicalInstitution, id=id_)
 
 
+class ProcedureView(View):
+    def get(self, request):
+        procedures = Procedure.objects.all()
+        context = {'procedures': procedures}
+        return render(request, 'remote_registration/all_procedure.html', context)
+
+
+class AddProcedureCategory(CreateView):
+    model = ProcedureCategories
+    form_class = AddProcedureCategoryForm
+    success_url = reverse_lazy('procedure')
+    template_name = 'remote_registration/uni_form_add.html'
+
+
+class DeleteProcedureCategory(DeleteView):
+    model = ProcedureCategories
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('procedure')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(ProcedureCategories, id=id_)
+
+
 class AddProcedure(FormView):
     form_class = AddProcedureForm
     template_name = 'remote_registration/uni_form_add.html'
     success_url = reverse_lazy('procedure')
 
     def form_valid(self, form):
-        name = form.cleaned_data.get('name').upper()
+        name = form.cleaned_data.get('name')
         details = form.cleaned_data.get('details').upper()
         duration = form.cleaned_data.get('duration')
         procedure = Procedure.objects.filter(name=name,
@@ -90,6 +121,13 @@ class DeleteProcedure(DeleteView):
     def get_object(self):
         id_ = self.kwargs.get('pk')
         return get_object_or_404(Procedure, id=id_)
+
+
+class PersonnelView(View):
+    def get(self, request):
+        personnel = Personnel.objects.all().order_by('pk')
+        context = {'personnel': personnel}
+        return render(request, 'remote_registration/all_personnel.html', context)
 
 
 class AddPersonnel(FormView):
@@ -129,6 +167,13 @@ class DeletePersonnel(DeleteView):
         return get_object_or_404(Personnel, id=id_)
 
 
+class TimeTableView(View):
+    def get(self, request):
+        time_table = TimeTable.objects.all().order_by('personnel')
+        context = {'time_table': time_table}
+        return render(request, 'remote_registration/all_time_table.html', context)
+
+
 class CreateTimeTable(CreateView):
     form_class = CreateTimeTableForm
     model = TimeTable
@@ -163,36 +208,46 @@ class DeleteTimeTable(DeleteView):
 #         return render(request, 'remote_registration/uni_form_add.html')
 
 
-class MedicalInstitutionView(View):
+class ReferralView(View):
     def get(self, request):
-        institutions = MedicalInstitution.objects.all()
-        context = {'institutions': institutions}
-        return render(request, 'remote_registration/all_medical_institution.html', context)
-
-
-class ProcedureView(View):
-    def get(self, request):
-        procedures = Procedure.objects.all()
-        context = {'procedures': procedures}
-        return render(request, 'remote_registration/all_procedure.html', context)
-
-
-class PersonnelView(View):
-    def get(self, request):
-        personnel = Personnel.objects.all().order_by('pk')
-        context = {'personnel': personnel}
-        return render(request, 'remote_registration/all_personnel.html', context)
-
-
-class TimeTableView(View):
-    def get(self, request):
-        time_table = TimeTable.objects.all().order_by('personnel')
-        context = {'time_table': time_table}
-        return render(request, 'remote_registration/all_time_table.html', context)
+        referrals = Referral.objects.filter(patient_id=request.user.pk)
+        return render(request, 'remote_registration/all_referral.html', context={'referrals': referrals})
 
 
 class AddReferral(View):
-    pass
+    def get(self, request):
+        form = AddReferralForm
+        context = {'form': form, 'submit': 'Dodaj'}
+        return render(request, 'remote_registration/referral_add.html', context)
+
+    def post(self,request):
+        form = AddReferralForm(request.POST)
+        if form.is_valid():
+            patient = form.cleaned_data.get('patient')
+            procedure = form.cleaned_data.get('procedure')
+            details = form.cleaned_data.get('details')
+            Referral.objects.create(patient=patient, procedure=procedure, details=details)
+            return redirect(reverse_lazy('referral'))
+        else:
+            context = {'form': form, 'submit': 'Dodaj'}
+            return render(request, 'remote_registration/referral_add.html', context)
+
+
+class UpdateReferral(UpdateView):
+    form_class = UpdateReferralForm
+    model = Referral
+    success_url = reverse_lazy('referral')
+    template_name = 'remote_registration/uni_form_update.html'
+
+
+class DeleteReferral(DeleteView):
+    model = Referral
+    template_name = 'remote_registration/uni_form_delete.html'
+    success_url = reverse_lazy('referral')
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(Referral, id=id_)
 
 
 class LoginView(View):
