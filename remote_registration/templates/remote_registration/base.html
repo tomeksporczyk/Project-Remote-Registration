@@ -5,8 +5,20 @@
     <title>Remote_registration</title>
 </head>
 <body>
+{% block header %}
+{% if user.is_authenticated %}
+  Zalogowany: {{ user.username }}
+  <p><a href="/user/details" class="btn btn-danger">Twoje dane</a></p>
+  <p><a href="{% url 'logout' %}" class="btn btn-danger">Wyloguj</a></p>
+{% else %}
+  <p>Nie jesteś zalogowany</p>
+  <a href="{% url 'login' %}" class="btn btn-success">Zaloguj się</a>
+  <a href="{% url 'user_add' %}" class="btn btn-success">Zarejestruj się </a>
+{% endif %}
+{% endblock %}
 {% block menu %}
     <nav>
+        <li><a href="/">Strona główna</a></li>
         <li><a href="/institution">Instytucje Medyczne</a></li>
         <li><a href="/procedure">Procedury</a></li>
         <li><a href="/personnel">Pracownicy</a></li>

@@ -1,7 +1,15 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
 
+
+class Provinces(models.Model):
+    '''todo: zmienic nazwy wojewodztw na wielkie litery'''
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class MedicalInstitution(models.Model):
@@ -9,14 +17,14 @@ class MedicalInstitution(models.Model):
     ward = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     city = models.CharField(max_length=64)
-    province = models.CharField(max_length=64)
+    province = models.ForeignKey(Provinces, on_delete=models.DO_NOTHING)
     address = models.CharField(max_length=64)
 
     def __str__(self):
         return f'Oddział: {self.ward} \nInstytuja: {self.name}'
 
     def save(self, *args, **kwargs):
-        for field_name in ['ward', 'name', 'city', 'province', 'address']:
+        for field_name in ['ward', 'name', 'city', 'address']:
             val = getattr(self, field_name, False)
             if val:
                 setattr(self, field_name, val.upper())
@@ -85,3 +93,8 @@ class Event(models.Model):
     end = models.DateTimeField()
     procedure = models.ForeignKey(Procedure, on_delete=models.CASCADE)
     medical_institution = models.ForeignKey(MedicalInstitution, on_delete=models.CASCADE)
+
+
+class Referral(models.Model):
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
+    procedure = models.ForeignKey(Procedure, on_delete=models.CASCADE)
