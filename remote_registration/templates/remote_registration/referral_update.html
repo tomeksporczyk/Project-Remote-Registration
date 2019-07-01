@@ -1,11 +1,9 @@
-{% extends "remote_registration/base.html" %}
-
+{% extends 'remote_registration/base.html' %}
 {% block content %}
-    {{ message|safe }}
     <form method="post" id="referralForm" data-details-url="{% url 'ajax_load_details' %}" novalidate>
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="{{ submit }}" class="btn btn-sm btn-outline-secondary" type="button">
+        <input type="submit" value="Zmień" class="btn btn-sm btn-outline-secondary" type="button">
     </form>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
@@ -19,11 +17,11 @@
               'procedure': procedureId       // add the country id to the GET parameters
             },
             success: function (data) {   // `data` is the return of the `load_cities` view function
+                console.log(data);
               $("#id_details").html(data);  // replace the contents of the city input with the data that came from the server
             }
           });
 
         });
     </script>
-
 {% endblock %}

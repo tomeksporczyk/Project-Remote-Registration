@@ -1,12 +1,11 @@
 {% extends "remote_registration/base.html" %}
 
 {% block content %}
-    <a href="/user/update">Zmień dane</a>
-    <a href="/user/update/password/">Zmień hasło</a>
-    <ul>
-        <li>Nazwa użytkownika: {{ user.username }}</li>
-        <li>Imię: {{ user.first_name }}</li>
-        <li>Nazwisko: {{ user.last_name }}</li>
-        <li>Adres e-mail: {{ user.email }}</li>
+    <a href="/user/update" class="btn btn-sm btn-outline-secondary" type="button">Zmień dane</a>
+    <a href="/user/update/password/" class="btn btn-sm btn-outline-secondary" type="button">Zmień hasło</a>
+    <ul class="list-group">
+        <li class="list-group-item">Imię: {{ user.first_name }}</li>
+        <li class="list-group-item">Nazwisko: {{ user.last_name }}</li>
+        <li class="list-group-item">Adres e-mail: {{ user.email }}</li>
     </ul>
 {% endblock %}

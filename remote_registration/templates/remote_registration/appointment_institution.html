@@ -1,0 +1,8 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <ul>
+        {% for institution in medical_institutions %}
+            <li><a href="{{ institution.id }}">{{ institution }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

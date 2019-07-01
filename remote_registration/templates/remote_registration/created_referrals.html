@@ -1,0 +1,24 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <a href="/referral/add" class="btn btn-sm btn-outline-secondary" type="button">Skieruj na badanie</a>
+    <table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Pacjent</th>
+            <th>Nazwa procedury</th>
+            <th>Szczegóły procedury</th>
+        </tr>
+        {% for referral in referrals %}
+            <tr>
+                <td>{{ referral.patient.first_name }} {{ referral.patient.last_name }}</td>
+                <td>{{ referral.procedure }}</td>
+                <td>{{ referral.details }}</td>
+                <td>
+                    <a href="/referral/update/{{ referral.id }}">Aktualizuj informacje</a>
+                    <a href="/referral/delete/{{ referral.id }}">Usuń</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

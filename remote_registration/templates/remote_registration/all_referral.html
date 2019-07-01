@@ -1,20 +1,16 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
-    <table>
+    <table class="table table-bordered">
     <tbody>
         <tr>
-            <th>Nazwa procedury</th>
-            <th>Szczegóły procedury</th>
+            <th>Nazwa badania</th>
+            <th>Szczegóły badania</th>
         </tr>
         {% for referral in referrals %}
             <tr>
                 <td>{{ referral.procedure }}</td>
                 <td>{{ referral.details }}</td>
-                <td>
-                    <a href="appointment/{{ referral.id }}">Umów się na badanie</a>
-                    <a href="update/{{ referral.id }}">Aktualizuj informacje</a>
-                    <a href="delete/{{ referral.id }}">Usuń</a>
-                </td>
+                 <td><a href="/appointment/{{ referral.id }}" class="btn btn-sm btn-outline-secondary" type="button">Umów się na badanie</a></td>
             </tr>
         {% endfor %}
     </tbody>

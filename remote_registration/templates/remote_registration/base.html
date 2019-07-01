@@ -1,31 +1,64 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Remote_registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="container text-primary">
 {% block header %}
+    <div style="width: 100%; height: 70px;">
+        <div style="position: relative; width: 100%; height: 100%; background-image: url('/static/img/harold1.jpg'); background-repeat: repeat-x;"></div>
+    </div>
 {% if user.is_authenticated %}
-  Zalogowany: {{ user.username }}
-  <p><a href="/user/details" class="btn btn-danger">Twoje dane</a></p>
-  <p><a href="{% url 'logout' %}" class="btn btn-danger">Wyloguj</a></p>
+    <div class="card-header">
+        <div class="col-md-4 offset-md-4">
+            <p class="text-primary">Zalogowany: {{ user.first_name }} {{ user.last_name }}</p>
+            <a href="/user/details" class="btn btn-sm btn-outline-secondary" type="button">Twoje dane</a>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-secondary" type="button">Wyloguj</a>
+        </div>
+    </div>
 {% else %}
-  <p>Nie jesteś zalogowany</p>
-  <a href="{% url 'login' %}" class="btn btn-success">Zaloguj się</a>
-  <a href="{% url 'user_add' %}" class="btn btn-success">Zarejestruj się </a>
+    <div class="card-header">
+        <div class="col-md-4 offset-md-4">
+            <p class="text-primary">Nie jesteś zalogowany</p>
+            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-secondary" type="button">Zaloguj się</a>
+            <a href="{% url 'user_add' %}" class="btn btn-sm btn-outline-secondary" type="button">Zarejestruj się </a>
+        </div>
+    </div>
 {% endif %}
 {% endblock %}
 {% block menu %}
-    <nav>
-        <li><a href="/">Strona główna</a></li>
-        <li><a href="/institution">Instytucje Medyczne</a></li>
-        <li><a href="/procedure">Procedury</a></li>
-        <li><a href="/personnel">Pracownicy</a></li>
-        <li><a href="/timetable">Grafiki pracy</a></li>
-        <li><a href="/referral/add">Skieruj na badania</a></li>
-        <li><a href="/referral">Twoje skierowania</a></li>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+          <a href="/" class="nav-link">Strona główna</a>
+      </li>
+      <li class="nav-item">
+          <a href="/institution" class="nav-link" >Instytucje Medyczne</a>
+      </li>
+      <li class="nav-item">
+          <a href="/procedure" class="nav-link">Procedury</a>
+      </li>
+      {% if perms.remote_registration.add_referral %}
+      <li class="nav-item">
+          <a href="/referral-created" class="nav-link">Skieruj na badania</a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+          <a href="/referral" class="nav-link">Twoje skierowania</a>
+      </li>
+      <li class="nav-item">
+          <a href="/appointments" class="nav-link">Umówione wizyty</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 {% endblock %}
 {% block content %}
 {% endblock %}

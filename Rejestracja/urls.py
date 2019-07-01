@@ -35,5 +35,5 @@ urlpatterns = [
     url(r'^user/reset/password/done/$', auth_views.PasswordResetDoneView.as_view(), name='user_reset_password_done'),
     url(r'^user/reset/password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     url(r'^user/reset/password/complete/$', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-
+#
 ]

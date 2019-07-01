@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.conf.global_settings import STATICFILES_DIRS
+
 from Rejestracja.db_settings import POSTGRES_USER, POSTGRES_PASSWORD
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,7 +82,7 @@ WSGI_APPLICATION = 'Rejestracja.wsgi.application'
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
-        'NAME': 'NFZ2',
+        'NAME': 'NFZ6',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': POSTGRES_USER,
         'PASSWORD': POSTGRES_PASSWORD,
@@ -125,7 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_DIRS = BASE_DIR + 'static'
+
 LOGIN_URL = '/login/'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+AUTH_USER_MODEL = 'remote_registration.User'

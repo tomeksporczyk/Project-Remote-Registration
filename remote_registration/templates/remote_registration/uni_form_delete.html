@@ -3,6 +3,6 @@
     <form method="post">
     {% csrf_token %}
     Czy chcesz usunąć obiekt: {{ object }}
-        <input type="submit" value="Usuń">
+        <input type="submit" value="Usuń" class="btn btn-sm btn-outline-secondary" type="button">
     </form>
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <p class="card-body text-muted font-weight-bold text-uppercase">Wybierz datę i godzinę badania</p>
+    {% if weeks_upfront > 0 %}
+    <a href="{% url 'appointment_date' referral_pk=referral_pk  institution_pk=institution_pk %}?weeks_upfront={{ weeks_upfront|add:"-1" }}"
+    class="btn btn-sm btn-outline-secondary" type="button">Poprzedni tydzień</a><br>
+    {% endif %}
+    <a href="{% url 'appointment_date' referral_pk=referral_pk  institution_pk=institution_pk %}?weeks_upfront={{ weeks_upfront|add:"1" }}"
+    class="btn btn-sm btn-outline-secondary" type="button">Następny tydzień</a>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-bordered">
+            <tbody>
+                {% for daytime in time_tables %}
+                        <tr>
+                        {% if daytime.1 %}
+                            <th>{{ daytime.0 }}<br>{{ daytime.1.0|date }}</th>
+                            {% for time in daytime.1 %}
+                                <td><input type="radio" name="datetime" value="{{ time.isoformat }}"><label for="{{ time }}">{{ time|time }}</label></td>
+                            {% endfor %}
+                        {% endif %}
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Zapisz się na wizytę" class="btn btn-sm btn-outline-secondary" type="button">
+    </form>
+{% endblock %}

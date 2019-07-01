@@ -1,21 +1,19 @@
 {% extends 'remote_registration/base.html' %}
 {% block content %}
-    <a href="category/add">Dodaj nową kategorię</a>
-    <a href="add">Dodaj nową procedurę</a>
-    <table>
+    <form action=".">
+        <input type="text" name="search_box" placeholder="Wyszukaj nazwę badania">
+        <input type="submit" value="Wyszukaj" class="btn btn-sm btn-outline-secondary" type="button">
+    </form>
+    <table class="table table-bordered">
     <tbody>
         <tr>
-            <th>Nazwa procedury</th>
-            <th>Szczegóły procedury</th>
+            <th>Nazwa badania</th>
+            <th>Szczegóły badania</th>
         </tr>
         {% for procedure in procedures %}
             <tr>
                 <td>{{ procedure.name }}</td>
                 <td>{{ procedure.details }}</td>
-                <td>
-                    <a href="update/{{ procedure.id }}">Aktualizuj informacje</a>
-                    <a href="delete/{{ procedure.id }}">Usuń</a>
-                </td>
             </tr>
         {% endfor %}
     </tbody>
