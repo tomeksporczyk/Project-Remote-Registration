@@ -48,6 +48,16 @@ class ProcedureView(View):
         return render(request, 'remote_registration/all_procedure.html', context)
 
 
+class ProcedureDetailsView(View):
+    def get(self, request, pk):
+        procedure = Procedure.objects.get(pk=pk)
+        medical_institutions = procedure.medical_institutions.all().distinct()
+        today = datetime.now()
+        
+        context = {'procedure': procedure, 'medical_institutions': medical_institutions}
+        return render(request, 'remote_registration/procedure_details.html', context)
+
+
 class PatientReferrals(LoginRequiredMixin, View):
     def get(self, request):
         referrals = Referral.objects.filter(patient_id=request.user.pk)

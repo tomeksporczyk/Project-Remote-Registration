@@ -1,0 +1,26 @@
+{% extends "remote_registration/base.html" %}
+
+{% block content %}
+    <h3>{{ procedure.name }} {{ procedure.details }}</h3>
+    <h5>Instutycje wykonujące tę procedurę:</h5>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Nazwa instytucji</th>
+                <th>Oddział</th>
+                <th>Województwo</th>
+                <th>Miejscowość</th>
+                <th>Adres</th>
+            </tr>
+            {% for institution in medical_institutions %}
+                 <tr>
+                    <td>{{ institution.name }}</td>
+                    <td>{{ institution.ward }}</td>
+                    <td>{{ institution.province }}</td>
+                    <td>{{ institution.city }}</td>
+                    <td>{{ institution.address }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
