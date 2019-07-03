@@ -11,6 +11,7 @@
                 <th>Województwo</th>
                 <th>Miejscowość</th>
                 <th>Adres</th>
+                <th>Najbliższy termin</th>
             </tr>
             {% for institution in medical_institutions %}
                  <tr>
@@ -19,6 +20,7 @@
                     <td>{{ institution.province }}</td>
                     <td>{{ institution.city }}</td>
                     <td>{{ institution.address }}</td>
+                    <td>{{ institution.available_date.date }}</td>
                 </tr>
             {% endfor %}
         </tbody>
