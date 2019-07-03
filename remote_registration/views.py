@@ -53,7 +53,63 @@ class ProcedureDetailsView(View):
         procedure = Procedure.objects.get(pk=pk)
         medical_institutions = procedure.medical_institutions.all().distinct()
         today = datetime.now()
-        
+        interval = procedure.duration
+        # existing_appointments = [timestamp.start.astimezone(None) for timestamp in Appointment.objects.filter(start__gte=today)]
+
+        for institution in medical_institutions:
+            print('_'*10)
+            print(institution.name)
+            weeks_upfront = 0
+            time_tables = procedure.timetable_set.filter(medical_institution=institution.pk)
+            part_a_time_tables = time_tables.filter(name__gte=today.weekday())
+            part_b_time_tables = time_tables.filter(name__lt=today.weekday())
+            time_tables = list(part_a_time_tables) + list(part_b_time_tables)
+            institutions_appointments = [timestamp.start.astimezone(None) for timestamp in Appointment.objects.filter(medical_institution=institution, details=procedure).filter(start__gte=today)]
+            print('institution app', institutions_appointments)
+            # iterator = len(time_tables)
+            # i =
+            for i, day in enumerate(time_tables):
+                print('ITER', i)
+                appointment_hour = datetime.combine(today.date()+timedelta(days=i+weeks_upfront*7), day.start).astimezone(None)
+                print('start appoint', appointment_hour)
+                institution.available_date = appointment_hour
+                day_count = 0
+
+                while appointment_hour.weekday() != day.name:
+                    appointment_hour = datetime.combine(today + timedelta(days=i + day_count), day.start).astimezone(None)
+                    day_count += 1
+                print('appointment  - ustalony dzień: ', appointment_hour)
+                while appointment_hour < timezone.now():
+                    appointment_hour += interval
+                end_of_work = datetime.combine(appointment_hour.date(), day.end).astimezone(None)
+                if appointment_hour > end_of_work:
+                    continue
+                print('appointment większy niż teraz: ', appointment_hour)
+                while appointment_hour < end_of_work-interval:
+                    if end_of_work - appointment_hour <= interval:
+                        print('end_of_work - appointment_hour < interval')
+                        print('odejmowanko', end_of_work - appointment_hour)
+                        appointment_hour += interval
+
+                    # j += 1
+
+                    print('aaaaaaaa', institution.name, appointment_hour)
+                    print('is date not in inst apps', appointment_hour not in institutions_appointments)
+                    if appointment_hour not in institutions_appointments:
+                        print('break')
+                        institution.available_date = appointment_hour
+                        break
+                    else:
+                        appointment_hour += interval
+                weeks_upfront += 1
+                print('institution.available date: ', institution.available_date)
+                print('koniec pracy: ', end_of_work)
+                # print(institution.available_date > datetime.combine(appointment_hour.date(), day.end).astimezone(None))
+                # if institution.available_date > datetime.combine(appointment_hour.date(), day.end):
+                #     continue
+                print('available date', institution.name, institution.available_date)
+
+
         context = {'procedure': procedure, 'medical_institutions': medical_institutions}
         return render(request, 'remote_registration/procedure_details.html', context)
 
@@ -144,13 +200,13 @@ class ChooseDateView(LoginRequiredMixin, View):
         for i, day in enumerate(time_tables):
             hours_list = []
             appointment_hour = datetime.combine(today+timedelta(days=i), day.start)  # datetime increased on every iterration
-            if i == 0 and weeks_upfront == 0:
+            day_count = 0
+            while appointment_hour.weekday() != day.name:  # sets a month date for weekday
+                appointment_hour = datetime.combine(today + timedelta(days=(i + day_count)), day.start)
+                day_count += 1
+            if i == 0 and weeks_upfront == 0:  # sets the datetime to be greater than now
                 while appointment_hour.astimezone(None) < timezone.now():
                     appointment_hour += interval
-            day_count = 0
-            while appointment_hour.weekday() != day.name:  # sets a moth date for weekday
-                appointment_hour = datetime.combine(today + timedelta(days=(i+day_count)), day.start)
-                day_count += 1
             j = 0
             while appointment_hour+j*interval < datetime.combine((appointment_hour.date()), day.end):  # creates list of appointment hours for every day
                 if make_aware(appointment_hour+j*interval) in existing_appointments:  # if apointment already exists do not include this datetime
