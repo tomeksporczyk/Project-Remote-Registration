@@ -62,80 +62,51 @@ class ProcedureDetailsView(View):
         procedure = Procedure.objects.get(pk=pk)
         medical_institutions = procedure.medical_institutions.all().distinct()
         today = datetime.now().astimezone(None)
-        # print(today)
         interval = procedure.duration
-        # institution = MedicalInstitution.objects.get(pk=1)
-        # time_tables = procedure.timetable_set.filter(medical_institution=institution.pk)
-        # part_a_time_tables = time_tables.filter(name__gte=today.weekday())
-        # part_b_time_tables = time_tables.filter(name__lt=today.weekday())
-        # time_tables = list(part_a_time_tables) + list(part_b_time_tables)  # table with datetime objects during which procedure is performed
-        # institution.available_date = datetime.combine(today.date(), time_tables[0].start).astimezone(None)
-        # print(institution.available_date)
-        # institution.available_date += interval
-        # print(institution.available_date)
-        # print(institution.available_date.time())
         for institution in medical_institutions:
             '''
             for every institution creates a property 'available_date' with value set to the
             earliest available appointment date.
             '''
-            # weeks_upfront = 0  # weeks counter, starting as present week
             time_tables = procedure.timetable_set.filter(medical_institution=institution.pk)
             part_a_time_tables = time_tables.filter(name__gte=today.weekday())
             part_b_time_tables = time_tables.filter(name__lt=today.weekday())
-            time_tables = list(part_a_time_tables) + list(part_b_time_tables)  # table with datetime objects during which procedure is performed
-            institutions_appointments = [timestamp.start.astimezone(None) for timestamp in Appointment.objects.filter(medical_institution=institution,
-                                                                                                                      details=procedure).filter(start__gte=today)]  # already existing appointments
+            time_tables = list(part_a_time_tables) + list(
+                part_b_time_tables)  # table with datetime objects during which procedure is performed
+            institutions_appointments = [timestamp.start.astimezone(None) for timestamp in
+                                         Appointment.objects.filter(medical_institution=institution.pk,
+                                                                    details=procedure.pk).filter(
+                                             start__gte=today)]  # already existing appointments
             appointments_counter = 0
             weeks_upfront = 0
             day = 0
-            institution.available_date = datetime.combine(today.date(), time_tables[day].start).astimezone(None)
+            workday = today
+            while workday.weekday() != time_tables[day].name:  # if today is not a workday, change the date
+                workday += timedelta(days=1)
+            institution.available_date = datetime.combine(workday.date(), time_tables[day].start).astimezone(None)
             while institution.available_date in institutions_appointments or institution.available_date < today:
-
-                institution.available_date = datetime.combine(today.date()+timedelta(days=day)+timedelta(weeks=weeks_upfront),
-                                                              time_tables[day].start+interval*appointments_counter).astimezone(None)
+                institution.available_date = (
+                            datetime.combine(workday.date() + timedelta(days=day) + timedelta(weeks=weeks_upfront),
+                                             time_tables[day].start) + interval * appointments_counter).astimezone(None)
                 appointments_counter += 1
-                # institution.available_date += interval
-                # print(institution.available_date)
-                if institution.available_date.time() >= time_tables[day].end:
-                    print('dupa')
-                    if day != len(time_tables)-1:
+                if institution.available_date.time() >= time_tables[day].end:  # if every appointment hour is occupied change the date
+                    if day != len(time_tables) - 1:
                         day += 1
+                        appointments_counter = 0
+                        institution.available_date = (
+                                datetime.combine(workday.date() + timedelta(days=day) + timedelta(weeks=weeks_upfront),
+                                                 time_tables[day].start) + interval * appointments_counter).astimezone(
+                            None)  # update the institution.available_date - change date reset the timer
                         while institution.available_date.weekday() != time_tables[day].name:
                             institution.available_date += timedelta(days=1)
                     else:
                         day = 0
                         weeks_upfront += 1
-
-            # iterator = len(time_tables)
-            # i = 0
-            # while i != iterator:
-            #     print('iterator', i)
-            #     appointment_hour = datetime.combine(today.date()+timedelta(days=i+weeks_upfront*7), time_tables[i].start).astimezone(None)  # first appointment of the day. Value increased on iteration of the day and the week
-            #     institution.available_date = appointment_hour  # create a property for institution, set to first available appointment for that day
-            #     day_count = 0
-            #     while appointment_hour.weekday() != time_tables[i].name:
-            #         appointment_hour = datetime.combine(today + timedelta(days=i + day_count), time_tables[i].start).astimezone(None)  # set the weekday of the monthday according to the weekday of time_tables
-            #         day_count += 1
-            #     while appointment_hour < timezone.now():
-            #         appointment_hour += interval  # set the time of the appointment tobe greater than equal to now
-            #     end_of_work = datetime.combine(appointment_hour.date(), time_tables[i].end).astimezone(None)
-            #     if appointment_hour > end_of_work:
-            #         i += 1  # if now is later than works end time go to another day of the time_tables
-            #         continue
-            #     while appointment_hour < end_of_work-interval:
-            #         # set the appointment_hour according to the already existing appointments
-            #         if appointment_hour not in institutions_appointments:
-            #             institution.available_date = appointment_hour  # if the appointment hour doesn't exist set property's value
-            #             break
-            #         else:
-            #             appointment_hour += interval
-            #     if appointment_hour not in institutions_appointments:
-            #         i = iterator  # stops the while loop
-            #         break
-            #     else:  # goes to another week
-            #         weeks_upfront += 1
-            #         i = 0
+                        appointments_counter = 0
+                        institution.available_date = (
+                                datetime.combine(workday.date() + timedelta(days=day) + timedelta(weeks=weeks_upfront),
+                                                 time_tables[day].start) + interval * appointments_counter).astimezone(
+                            None)
         context = {'procedure': procedure, 'medical_institutions': medical_institutions}
         return render(request, 'remote_registration/procedure_details.html', context)
 
