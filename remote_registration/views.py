@@ -178,6 +178,8 @@ class ChooseInstitutionView(LoginRequiredMixin, View):
 
 
 class ChooseDateView(LoginRequiredMixin, View):
+    '''todo: filters broken (does not show every date although the DB is empty)
+    remainder: use models class method'''
     def get(self, request, referral_pk, institution_pk):
         '''
         :return: Table with available datetime appointments.
