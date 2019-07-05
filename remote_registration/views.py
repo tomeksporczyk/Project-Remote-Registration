@@ -34,6 +34,14 @@ class MedicalInstitutionView(View):
         return render(request, 'remote_registration/all_medical_institution.html', context)
 
 
+class MedicalInstitutionDetailsView(View):
+    def get(self, request, pk):
+        institution = MedicalInstitution.objects.get(pk=pk)
+        wards = MedicalInstitution.objects.filter(name=institution.name)
+        context = {'institution': institution, 'wards': wards}
+        return render(request, 'remote_registration/medical_institution_details.html', context)
+
+
 class ProcedureView(View):
     '''todo: każda procedura to link do listy instytucji wykonujących badanie z najbliższymi terminami
     wyszukiwarka procedur'''

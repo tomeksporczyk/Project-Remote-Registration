@@ -1,0 +1,15 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <h5>Szpital: {{ institution.name }}</h5>
+    <ul class="list-group">
+        <li class="list-group-item">Adres: ul.&nbsp;{{ institution.address }}</li>
+        <li class="list-group-item">Miejscowość: {{ institution.city }}</li>
+        <li class="list-group-item">Województwo: {{ institution.province }}</li>
+    </ul>
+    <h5>Oddziały:</h5>
+    <ul class="list-group">
+        {% for ward in wards %}
+        <li class="list-group-item">{{ ward.ward }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
