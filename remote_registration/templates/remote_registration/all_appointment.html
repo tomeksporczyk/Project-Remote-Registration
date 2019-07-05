@@ -15,7 +15,7 @@
                     <td>{{ appointment.start }}</td>
                     <td>{{ appointment.procedure }} {{ appointment.details }}</td>
                     <td>{{ appointment.medical_institution.name }} {{ appointment.medical_institution.ward }}</td>
-                    <td>{{ appointment.medical_institution.city }}</td>
+                    <td>{{ appointment.medical_institution.city }} ul.&nbsp;{{ appointment.medical_institution.address }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -34,7 +34,7 @@
                     <td>{{ appointment.start }}</td>
                     <td>{{ appointment.procedure }} {{ appointment.details }}</td>
                     <td>{{ appointment.medical_institution.name }} {{ appointment.medical_institution.ward }}</td>
-                    <td>{{ appointment.medical_institution.city }}</td>
+                    <td>{{ appointment.medical_institution.city }} ul.&nbsp;{{ appointment.medical_institution.address }}</td>
                 </tr>
             {% endfor %}
         </tbody>
