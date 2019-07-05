@@ -24,7 +24,6 @@ class HomeView(View):
 
 
 class MedicalInstitutionView(View):
-    '''todo: każda instytucja to link do widoku z informacjami o szpitalu (może mapką?) i procedurach lub oddziałach'''
     def get(self, request):
         institutions = MedicalInstitution.objects.all()
         search_box = request.GET.get('search_box', None)
@@ -32,6 +31,16 @@ class MedicalInstitutionView(View):
             institutions = institutions.filter(name__icontains=search_box)
         context = {'institutions': institutions}
         return render(request, 'remote_registration/all_medical_institution.html', context)
+
+
+class MedicalInstitutionDetailsView(View):
+    '''todo: every ward is a link to list of procedures performed with dates of the nearest appointment
+    a map for every institution'''
+    def get(self, request, pk):
+        institution = MedicalInstitution.objects.get(pk=pk)
+        wards = MedicalInstitution.objects.filter(name=institution.name)
+        context = {'institution': institution, 'wards': wards}
+        return render(request, 'remote_registration/medical_institution_details.html', context)
 
 
 class ProcedureView(View):

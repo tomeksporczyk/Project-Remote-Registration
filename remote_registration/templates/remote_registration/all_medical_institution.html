@@ -15,13 +15,14 @@
                 <th>Adres</th>
             </tr>
             {% for institution in institutions %}
-                <tr>
-                    <td>{{ institution.name }}</td>
-                    <td>{{ institution.ward }}</td>
-                    <td>{{ institution.province }}</td>
-                    <td>{{ institution.city }}</td>
-                    <td>{{ institution.address }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ institution.name }}</td>
+                        <td>{{ institution.ward }}</td>
+                        <td>{{ institution.province }}</td>
+                        <td>{{ institution.city }}</td>
+                        <td>{{ institution.address }}</td>
+                        <td><a href="{{ institution.id }}" class="btn btn-sm btn-outline-secondary" type="button">Szczegóły</a></td>
+                    </tr>
             {% endfor %}
         </tbody>
         </table>
