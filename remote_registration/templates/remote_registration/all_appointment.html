@@ -1,0 +1,44 @@
+{% extends 'remote_registration/base.html' %}
+{% block content %}
+    <div>
+    <h5>Przyszłe badania</h5>
+        <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Godzina wizyty</th>
+                <th>Badanie</th>
+                <th>Placówka</th>
+                <th>Adres</th>
+            </tr>
+            {% for appointment in future_appointments %}
+                <tr>
+                    <td>{{ appointment.start }}</td>
+                    <td>{{ appointment.procedure }} {{ appointment.details }}</td>
+                    <td>{{ appointment.medical_institution.name }} {{ appointment.medical_institution.ward }}</td>
+                    <td>{{ appointment.medical_institution.city }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    <h5>Archiwum Twoich badań</h5>
+        <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Godzina wizyty</th>
+                <th>Badanie</th>
+                <th>Placówka</th>
+                <th>Adres</th>
+            </tr>
+            {% for appointment in past_appointments %}
+                <tr>
+                    <td>{{ appointment.start }}</td>
+                    <td>{{ appointment.procedure }} {{ appointment.details }}</td>
+                    <td>{{ appointment.medical_institution.name }} {{ appointment.medical_institution.ward }}</td>
+                    <td>{{ appointment.medical_institution.city }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+{% endblock %}

@@ -256,9 +256,13 @@ class ChooseDateView(LoginRequiredMixin, View):
 
 
 class AppointmentsView(View):
-    '''todo: Widok z twoimi umówionymi wizytami'''
     def get(self, request):
-        return HttpResponse('feature under construction')
+        now = datetime.now().astimezone(None)
+        user_appointments = Appointment.objects.filter(patient=request.user)
+        future_appointments = user_appointments.filter(start__gte=now)
+        past_appointments = user_appointments.filter(start__lt=now)
+        context = {'future_appointments': future_appointments, 'past_appointments': past_appointments}
+        return render(request, 'remote_registration/all_appointment.html', context)
 
 
 class LoginView(View):
