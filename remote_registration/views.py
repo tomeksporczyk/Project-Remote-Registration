@@ -44,8 +44,7 @@ class MedicalInstitutionDetailsView(View):
 
 
 class ProcedureView(View):
-    '''todo: każda procedura to link do listy instytucji wykonujących badanie z najbliższymi terminami
-    wyszukiwarka procedur'''
+    '''todo: wyszukiwarka procedur'''
     def get(self, request):
         procedures = Procedure.objects.all()
         search_box = request.GET.get('search_box', None)
@@ -195,7 +194,8 @@ class ChooseDateView(LoginRequiredMixin, View):
         part_b_time_tables = time_tables.filter(name__lt=today.weekday())
         time_tables = list(part_a_time_tables) + list(part_b_time_tables)  # create days table with days during which procedure is performed
         current_week = []
-        existing_appointments = [timestamp.start.astimezone(None) for timestamp in Appointment.objects.filter(start__gte=today)]  # list with appointments already created
+        existing_appointments = [timestamp.start.astimezone(None) for timestamp in Appointment.objects.filter(medical_institution=institution_pk,
+                                                                                                              start__gte=today)]  # list with appointments already created
         for i, day in enumerate(time_tables):
             hours_list = []
             appointment_hour = datetime.combine(today+timedelta(days=i), day.start)  # datetime increased on every iterration
