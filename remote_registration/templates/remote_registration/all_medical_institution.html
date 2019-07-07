@@ -6,7 +6,8 @@
 {#            <input type="submit" value="Wyszukaj" class="btn btn-sm btn-outline-secondary" type="button">#}
 {#        </form>#}
         <input type="text" name="search_name" id="search_name" placeholder="Szukaj po nazwie placówki">
-        <select name="search_province" id="search_province">
+        <label for="search_province">Wybierz województwo</label><select name="search_province" id="search_province">
+            <option value="">Wszystkie województwa</option>
             {% for province in provinces %}
             <option value="{{ province.name }}">{{ province.name }}</option>
             {% endfor %}
