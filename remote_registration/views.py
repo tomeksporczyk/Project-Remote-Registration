@@ -26,10 +26,12 @@ class HomeView(View):
 class MedicalInstitutionView(View):
     def get(self, request):
         institutions = MedicalInstitution.objects.all()
+        provinces = Provinces.objects.all()
         search_box = request.GET.get('search_box', None)
         if search_box is not None and len(search_box) > 0:
             institutions = institutions.filter(name__icontains=search_box)
-        context = {'institutions': institutions}
+        context = {'institutions': institutions,
+                   'provinces': provinces}
         return render(request, 'remote_registration/all_medical_institution.html', context)
 
 

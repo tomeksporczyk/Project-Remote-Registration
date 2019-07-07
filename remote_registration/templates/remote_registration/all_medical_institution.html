@@ -5,9 +5,14 @@
 {#            <input type="text" name="search_box" placeholder="Wyszukaj nazwę instytucję">#}
 {#            <input type="submit" value="Wyszukaj" class="btn btn-sm btn-outline-secondary" type="button">#}
 {#        </form>#}
-        <input type="text" name="search_name" id="search_name">
+        <input type="text" name="search_name" id="search_name" placeholder="Szukaj po nazwie placówki">
+        <select name="search_province" id="search_province">
+            {% for province in provinces %}
+            <option value="{{ province.name }}">{{ province.name }}</option>
+            {% endfor %}
+        </select>
         <table class="table table-bordered">
-        <tbody>
+        <thead>
             <tr>
                 <th>Nazwa instytucji</th>
                 <th>Oddział</th>
@@ -15,11 +20,13 @@
                 <th>Miejscowość</th>
                 <th>Adres</th>
             </tr>
+        </thead>
+        <tbody>
             {% for institution in institutions %}
                     <tr>
                         <td id="institution_name">{{ institution.name }}</td>
                         <td>{{ institution.ward }}</td>
-                        <td>{{ institution.province }}</td>
+                        <td id="province">{{ institution.province }}</td>
                         <td>{{ institution.city }}</td>
                         <td>{{ institution.address }}</td>
                         <td><a href="{{ institution.id }}" class="btn btn-sm btn-outline-secondary" type="button">Szczegóły</a></td>
@@ -31,11 +38,11 @@
     <script>
         $(document).ready(function(){
             $('#search_name').keyup(function(){
-                search_table($(this).val());
+                search_name($(this).val());
             });
 
-            function search_table(value){
-                $('tr #institution_name').each(function(){
+            function search_name(value){
+                $('tr:not(.province_filter) #institution_name').each(function(){
                     var found = 'false';
                     $(this).each(function(){
                         if($(this).text().toUpperCase().indexOf(value.toUpperCase()) >= 0)
@@ -53,6 +60,34 @@
                     }
                 })
             }
+
+            $('#search_province').click(function(){
+                search_province($(this).val());
+            });
+
+            function search_province(value){
+                $('tr #province').each(function(){
+                   var found = 'false';
+                    $(this).each(function(){
+                        if($(this).text().toUpperCase().indexOf(value.toUpperCase()) >= 0)
+                        {
+                            found = 'true';
+                        }
+                    });
+                    if(found === 'true')
+                    {
+                        $(this).parent('tr').show();
+                        $(this).parent('tr').removeClass("province_filter")
+
+                    }
+                    else
+                    {
+                        $(this).parent('tr').hide();
+                        $(this).parent('tr').addClass("province_filter")
+                    }
+                })
+            }
+
         });
     </script>
 {% endblock %}
