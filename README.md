@@ -1,5 +1,6 @@
 # Project-Remote-Registration
 
+Description:
 An aplication that symulates a registration for a medical procedures requiering a doctor's referral. The app is designed for two groups of users: doctors and patients. Former are able to create referral objects assigned to the patients. Later can use referral to make an appointment in a medical institution for a specific procedure at a time of their choice.
 
 Used technologies:
